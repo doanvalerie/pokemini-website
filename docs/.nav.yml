@@ -1,0 +1,9 @@
+nav:
+ - index.md
+ - description.md
+ - design.md
+ - implementation.md
+ - challenges.md
+ - future-work.md
+ - bill-of-materials.md
+ - map.md
