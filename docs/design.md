@@ -14,14 +14,14 @@ To begin with, when the board is powered on, the system does not transition to
 one of the 4 pages just yet, but instead enters a loop to attempt connecting to
 the pre-configured WiFi network. In this loop, the text `Connecting to Wifi...`
 is printed on the top of the OLED screen. Then, when the LaunchPad is finally
-able to connect to the specified network, then the state transitions into the
-initial landing page.
+able to connect to the specified network, the state transitions into the initial
+landing page.
 
 In the landing page, we display the title "Pokemini Go" in a custom font, with a
-picture of a Pikachu Pokémon in the bottom right. Then, we also show the user's
-GPS coordinates and the enemy's GPS coordinates on the left of the screen. On
-the bottom of the screen, we show an indication that pressing the number button
-`1` on the IR remote will switch pages to the collection page.
+picture of a Pikachu Pokémon on the right. Then, we also show the user's GPS
+coordinates and the enemy's GPS coordinates on the left of the screen. On the
+bottom of the screen, we show an indication that pressing the number button `1`
+on the IR remote will switch pages to the collection page.
 
 ![Landing Page](./assets/landing-page.png)
 
@@ -79,13 +79,13 @@ trigger the user's health to decrease by one, or the enemy's health to decrease
 by one. To ensure that a win or loss is guaranteed without ties, we ensure that
 5 of the buttons are assigned to decrease a user heart and that the other 5
 buttons are assigned to decrease an enemy heart. Given the four hearts for each
-user, each user starts with a health value of 4. By pressing a button, either
-the user's health will randomly go down by 1, or the enemy's health will
-randomly go down by 1. The IR remote's number button actions are set at random
-whenever the fight state is entered. Then, when a number button is pressed, the
-press is recorded. A number cannot be re-pressed within the fight page. Thus,
-the user must exhaust all the number buttons until either the user loses all of
-their hearts or the enemy loses all of their hearts.
+player, the enemy and user both start with a health value of 4. By pressing a
+button, either the user's health will randomly go down by 1, or the enemy's
+health will randomly go down by 1. The IR remote's number button actions are
+set at random whenever the fight state is entered. Then, when a number button is
+pressed, the press is recorded. A number cannot be re-pressed within the fight
+page. Thus, the user must exhaust all the number buttons until either the user
+loses all of their hearts or the enemy loses all of their hearts.
 
 While in the fight page, the background process for querying the server for
 nearby Pokémon is halted. This way, the user will not be prompted to attack
@@ -159,7 +159,7 @@ http://<server_address>/pokemon/nearby?latitude=37.000000&longitude=-121.000000
 If the query parameters are not given, then the web server returns a `400 Bad
 Request` error.
 
-After parsing the user's coordinates, then the server queries DynamoDB for all
+After parsing the user's coordinates, the server queries DynamoDB for all
 Pokémon within a 100-meter radius of the user's GPS coordinates. If there are
 less than 6 Pokémon within the 100-meter radius of the user's coordinates, then
 the server requests for more Pokémon to be created such that the 6 Pokémon
@@ -187,9 +187,8 @@ Pokémon inside of the 30-meter margin-activation radius are removed from the
 DynamoDB Pokémon collection. That is, if there is a single Pokémon inside of the
 30-meter radius, then that Pokémon is returned and not deleted. If there is more
 than one Pokémon inside of the 30-meter radius, then the closest of those
-Pokémon is returned, and then the other Pokémon are deleted. If there are no
-Pokémon inside of the 30-meter radius, then trivially none of the Pokémon are
-deleted.
+Pokémon is returned, and the other Pokémon are deleted. If there are no Pokémon
+inside of the 30-meter radius, then trivially none of the Pokémon are deleted.
 
 The reason for this behavior is so that after the user fights or flees the
 nearest Pokémon inside of their 10-meter activation radius, then the user will
@@ -203,7 +202,7 @@ DynamoDB for the list of all Pokémon that are stored in the user's document.
 These Pokémon are then simply returned back to the user.
 
 For the `HTTP POST` request to
-`/users/<string:userId>/pokemon/<string:pokemonId>` the specified Pokémon is
+`/users/<string:userId>/pokemon/<string:pokemonId>`, the specified Pokémon is
 retrieved from the DynamoDB Pokémon collection, deleted from the Pokémon
 collection, and then re-inserted into the user's document.
 
@@ -223,10 +222,10 @@ Pokémon and their locations in close to realtime.
 
 In particular, we leverage the Google Maps API to render a React component for a
 Google Map that uses the full view-port of the browser window. Then, we render a
-pin for the user's current location onto the map, and then we render all of the
+pin for the user's current location onto the map. We also render all of the
 Pokémon from the DynamoDB Pokémon collection onto the map, using downloaded
 images of the Pokémon and rendering those Pokémon to their respective GPS
-coordinates on the map.
+coordinates.
 
 In a background loop, we update the user's shown location and the status of all
 Pokémon every 5 seconds.
