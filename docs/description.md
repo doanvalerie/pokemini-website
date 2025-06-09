@@ -73,7 +73,7 @@ and GPS module.
 
 ### IR receiver
 
-An AT\&T IR universal remote control is used to send signals to an IR receiver.
+An AT&T IR universal remote control is used to send signals to an IR receiver.
 We incorporate code from Lab 3 ("IR Remote Control Texting Over a UART Link") to
 decode signals for identifying specific button presses. To reduce the noise from
 the power source, the IR receiver is connected to a low-pass filter composed of
@@ -122,7 +122,7 @@ unidirectional wires as described below.
 4. Master-In Slave-Out (MISO): A slave-to-master wire that transmits data from a
    slave device to the master.
 
-## Universal Asynchronous Receiver/Transmitter (UART)
+### Universal Asynchronous Receiver/Transmitter (UART)
 
 Universal Asynchronous Receiver/Transmitter (UART) is an asynchronous serial
 communication protocol that uses two one-way wires, a connection for
