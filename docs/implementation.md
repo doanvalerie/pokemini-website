@@ -79,20 +79,18 @@ transmission enough to allow the LaunchPad to read the message faster than it is
 transmitted.
 
 Changing the baud is an involved process. Firstly, the specific GPS module that
-we use is the
-\href{https://www.hglrc.com/products/m100-5883-gps?srsltid=AfmBOor17IWhtMt4P6nsx0QI5u1bGGEDSzH--SjuEkOcAcFVDiZUdRY5}{\color{blue}HGLRC
-M100-5883}. This package specifically uses the
-\href{https://content.u-blox.com/sites/default/files/MAX-M10S_DataSheet_UBX-20035208.pdf}{\color{blue}
-UBlox M10 series baseband GPS chip}. That chip uses the
-\href{https://content.u-blox.com/sites/default/files/products/documents/u-blox6_ReceiverDescrProtSpec_%28GPS.G6-SW-10018%29_Public.pdf}{\color{blue}UBlox
-Protocol} which specifies the supported NMEA output as well as the format for
-configuring the chip itself.
+we use is the [HGLRC M100-5883](https://www.hglrc.com/products/m100-5883-gps?srsltid=AfmBOor17IWhtMt4P6nsx0QI5u1bGGEDSzH--SjuEkOcAcFVDiZUdRY5). 
+This package specifically uses the [UBlox M10 series baseband GPS chip](https://content.u-blox.com/sites/default/files/MAX-M10S_DataSheet_UBX-20035208.pdf).
+That chip uses the [UBlox Protocol](https://content.u-blox.com/sites/default/files/products/documents/u-blox6_ReceiverDescrProtSpec_%28GPS.G6-SW-10018%29_Public.pdf)
+which specifies the supported NMEA output as well as the format for configuring
+the chip itself.
 
 For configuring the baud rate on the UBlox chip, first we reference section
-21.12 of the [UBlox protocol specification](https://content.u-blox.com/sites/default/files/products/documents/u-blox6_ReceiverDescrProtSpec_%28GPS.G6-SW-10018%29_Public.pdf) which specifies
-sending a UART message to the RX pin of the UBlox chip with header `$PUBX,41,1`.
-Then, as shown in the following screenshot from the documentation, we append the
-fields `,0007,0003` to update UART baudrate specifically. 
+21.12 of the [UBlox protocol specification](https://content.u-blox.com/sites/default/files/products/documents/u-blox6_ReceiverDescrProtSpec_%28GPS.G6-SW-10018%29_Public.pdf) 
+which specifies sending a UART message to the RX pin of the UBlox chip with
+header `$PUBX,41,1`. Then, as shown in the following screenshot from the
+documentation, we append the fields `,0007,0003` to update UART baudrate
+specifically. 
 
 ![Landing Page](./assets/set-baud-rate.png)
 
@@ -109,8 +107,10 @@ $PUBX,41,1,0007,0003,57600,0
 
 For the UBlox checksum, we calculate the XOR8 checksum. The XOR8 checksum simply
 takes each byte of the message and then computes the bitwise exclusive-or
-operation on each successive byte, returning a final checksum byte. We use [this online tool](https://www.convertcase.com/hashing/xor-checksum) to calculate the checksum for `PUBX,41,1,0007,0003,57600,0` which is the
-same command string as above except without the leading $ character.
+operation on each successive byte, returning a final checksum byte. We use
+[this online tool](https://www.convertcase.com/hashing/xor-checksum)
+to calculate the checksum for `PUBX,41,1,0007,0003,57600,0` which is the same
+command string as above except without the leading $ character.
 
 Thus, the resulting checksum in hexadecimal is `2b`. Finally, this is appended
 to the original message to result in a final command message of
@@ -140,7 +140,9 @@ capture a sample NMEA sentence to ensure that the baudrate remains at 57600.
 Next, we construct a command to save the configuration of the GPS module to the
 GPS module's onboard non-volatile memory.
 
-In particular, we reference the following [UBlox protocol section 31.2.1](https://content.u-blox.com/sites/default/files/products/documents/u-blox6_ReceiverDescrProtSpec_%28GPS.G6-SW-10018%29_Public.pdf) which instructs transmitting a UART message to the UBlox chip RX pin with header bytes `0xB5 0x62 0x06 0x09`. 
+In particular, we reference the following [UBlox protocol section 31.2.1](https://content.u-blox.com/sites/default/files/products/documents/u-blox6_ReceiverDescrProtSpec_%28GPS.G6-SW-10018%29_Public.pdf)
+which instructs transmitting a UART message to the UBlox chip RX pin with header
+bytes `0xB5 0x62 0x06 0x09`. 
 
 ![Landing Page](./assets/ublox-cfg-cfg.png)
 
