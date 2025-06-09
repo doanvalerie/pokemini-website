@@ -2,8 +2,8 @@
 
 ## Create a JSON parser
 
-When the Launchpad makes an HTTP GET request for user data or the nearest
-Pokemon, the API handlers in our Express.JS server return a newline separated
+When the LaunchPad makes an HTTP GET request for user data or the nearest
+Pokémon, the API handlers in our Express.JS server return a newline separated
 payload. Rather than listing key-value pairs in a JSON format, our response only
 returns the values with a newline delimiter. Although this makes it easier to
 parse in C, it is not a robust solution. There is a lack of clarity for the
@@ -27,12 +27,12 @@ extended and correctly read with lower chance of bugs.
 ## Integrate compass sensor
 
 One of our stretch goals was to use a peripheral compass sensor that would send
-magnetic heading data to the Launchpad. We would then use this compass to
-determine the direction to the nearest Pokemon by calculating the vector from
-the user’s GPS coordinates to the nearest Pokemon’s GPS coordinates, and then
-calculating the angular offset from the direction that the Launchpad is
+magnetic heading data to the LaunchPad. We would then use this compass to
+determine the direction to the nearest Pokémon by calculating the vector from
+the user’s GPS coordinates to the nearest Pokémon’s GPS coordinates, and then
+calculating the angular offset from the direction that the LaunchPad is
 pointing. Then, we would render an arrow in a virtual compass on the landing
-page to direct the user in the direction toward the nearest Pokemon.
+page to direct the user in the direction toward the nearest Pokémon.
 
 The day before our project verification day, we had finished all of our minimal
 and target goals and also numerous of our stretch goals, so we attempted to try
@@ -53,7 +53,7 @@ along any axis.
 
 These calibrations are complicated and are usually performed with existing
 calibration software, using better documented boards with existing libraries,
-such as an Arduino or a Raspberry Pi. On the Launchpad CC3200, we lacked any
+such as an Arduino or a Raspberry Pi. On the LaunchPad CC3200, we lacked any
 code to assist us in performing magnetometer calibration. Thus, after
 approximately four hours of attempting to perform temporary calibrations, we
 decided to move on to abandoning the compass approach and instead polishing the
@@ -63,5 +63,5 @@ when moving the magnetometer around just inches at a time. Thus, the
 magnetometer was impossible to use in an uncalibrated form.
 
 It was after attempting the compass module that we then implemented one of our
-other stretch goals, which was to implement a real-time web map of the Pokemon.
-This provided similar functionality of guiding the user to the nearest Pokemon.
+other stretch goals, which was to implement a real-time web map of the Pokémon.
+This provided similar functionality of guiding the user to the nearest Pokémon.
