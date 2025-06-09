@@ -5,24 +5,24 @@ project.
 
 ## Unable to connect to common HTTPS endpoints
 
-Our initial idea was to have the Launchpad make HTTPS requests to an AWS Lambda
+Our initial idea was to have the LaunchPad make HTTPS requests to an AWS Lambda
 endpoint. AWS Lambda is a "serverless" compute service. That is, it runs a
 defined function when an HTTP endpoint is called, and thus allows us to write
 API handlers without having to manually configure and maintain any extra server
 infrastructure. However, we encountered major difficulties when attempting to
 establish a TLS connection to the Lambda endpoint. At first, we attempted
-establishing a TLS connection to the lambda endpoint using the same TLS root,
+establishing a TLS connection to the Lambda endpoint using the same TLS root,
 client, and private certificates that we had configured from Lab 4. However, we
 received error code `-6` from the function `sl_Connect()`, indicating that a
 connection could not be established on the configured TLS socket. We then
 attempted manually downloading and flashing the AWS CA Root Certificate onto the
-Launchpad. We verified that the certificate was in DER format and also attempted
+LaunchPad. We verified that the certificate was in DER format and also attempted
 consolidating it with intermediary certificates used on our particular Lambda
 endpoint into other DER files. However, none of these certificate chains
 permitted a successful TLS connection. After reading through AWS Lambda TLS
 documentation on supported TLS ciphers, we hypothesized that perhaps the default
 directly-exposed Lambda certificate required the use of recent ciphers that the
-Launchpad did not support. Thus, we also tried configuring an API Gateway, which
+LaunchPad did not support. Thus, we also tried configuring an API Gateway, which
 is an AWS service for a REST API front-end that allows for more fine-grained
 configuration of API endpoints. In particular, API Gateway supports lower
 security levels and older ciphers to be explicitly configured on select endpoint
@@ -30,7 +30,7 @@ paths to support older clients. However, we could not establish a TLS connection
 to the API Gateway either.
 
 We also considered using MQTT and just using the IoT shadow endpoint as
-previously used in Lab 4. For MQTT, we read through the sample client code
+previously used in lab 4. For MQTT, we read through the sample client code
 provided in the TI SDK. However, we realized that the MQTT code required the use
 of lightweight operating systems, namely Ti-OS or FreeRTOS, which use hardware
 interrupts to implement pre-emptive scheduling for multitasking. If we were to
