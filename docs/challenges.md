@@ -1,6 +1,6 @@
 # Challenges
 
-We encountered a couple of major challenges during the implemen- tation of our
+We encountered a couple of major challenges during the implementation of our
 project.
 
 ## Unable to connect to common HTTPS endpoints
