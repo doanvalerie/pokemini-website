@@ -10,19 +10,19 @@ parse in C, it is not a robust solution. There is a lack of clarity for the
 meaning of each line, considering that the key is not present. We implement
 numerous heuristics in our parsing to verify validity of each transmission and
 whether certain fields are present or absent, rather than adhering to a strict
-grammar like JSON. As an example, our parsing logic depends on the orde rof each
+grammar like JSON. As an example, our parsing logic depends on the order of each
 line. Therefore, if we extend our APIs to return additional data in the payload,
 we also have to change our C code to ensure that we are reading corresponding
 data from the correct line. This contrasts JSON notation, where the keys are not
-ordered, and values are instead interpreted according to the exact key it
-corresponds to.
+ordered, and values are instead interpreted according to the exact key they 
+correspond to.
 
 Although we initially began writing a JSON parser from scratch in C, we later
 found it more important to concentrate our efforts on the goals we set during
 our project proposal. Therefore, we converted our payloads from JSON notation to
 a newline separated payload. In the future, we would like to create a JSON
-parser so that we can return data in an effective structure that can easily be
-extended.
+parser so that we can return data in a stricter structure that can easily be
+extended and correctly read with lower chance of bugs.
 
 ## Integrate compass sensor
 
