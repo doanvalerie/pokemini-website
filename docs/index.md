@@ -1,5 +1,7 @@
 # Introduction
 
+By **Valerie Doan** and **Nicolas Kennedy**
+
 ## Overview
 
 To showcase the knowledge we gained from the course EEC 172 – Embedded Systems,
