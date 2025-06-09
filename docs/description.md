@@ -8,7 +8,7 @@ The user interface to Pokémini Go is a 128x128 OLED display. We implement four
 different OLED pages – a landing page, collection page, fight or flee page, and
 fight page. We describe these pages in greater detail below.
 
-1. When the program starts finishes setup, the user is navigated to the landing
+1. When the program starts and finishes setup, the user is navigated to the landing
    page. The landing page displays the board's real-time location in latitude
    and longitude. Furthermore, the coordinates of the Pokémon closest to the
    user are displayed. This informs the user of the nearest location they can
@@ -31,7 +31,7 @@ fight page. We describe these pages in greater detail below.
    collects the Pokémon that had activated the fight. The user is redirected to
    the collection page, where they can view the new Pokémon in their collection.
    Otherwise, if the user is the first to lose all their hearts, the Pokémon
-   "escapes", and the user loses the opportunity to collect that Pokémon. They
+   "escapes," and the user loses the opportunity to collect that Pokémon. They
    are subsequently redirected to the landing page.
 
 We also deploy a web application that displays a real-time map of all Pokémon in
@@ -171,7 +171,7 @@ We also use the `cc3200tool` to write to flash memory, ensuring that our project
 is stand-alone. As mentioned in lab 1 ("Development Tools Tutorial and Lab
 Introduction"), we run the following command to write `pokemon-go.bin` to
 `/sys/mcuimg.bin`. After the program has been written to non-volatile memory,
-the application will run once the LaunchPad is connected to power. Pressing the
+the application will run after the LaunchPad is connected to power. Pressing the
 "Reset" button will restart the application. 
 
 ```
