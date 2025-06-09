@@ -195,7 +195,7 @@ works is that on every iteration of our main game loop in `game.c`, a function
 `PollEnableGPS()` is called which will increment a counter `gpg_read_timeout`.
 Then, when `gpg_read_timeout` reaches `GPG_READ_LIMIT` the UART1 RX buffer
 interrupt handler is re-enabled, allowing the board to respond to and process
-the influx of GPS NMEA sentences. Then, when the GPGGA sentence is fully parsed,
+the influx of GPS NMEA sentences. Then, when the GNGGA sentence is fully parsed,
 the UART1 RX buffer is disabled again. This strategy allows the board to sample
 the GPS NMEA sentences at a much slower rate that is acceptable, allowing other
 program processes to have enough time to execute successfully at their own
@@ -331,7 +331,7 @@ state.
 10. `should_fight`: true if the user is within the 10-meter activation radius of the Pokémon; false otherwise. (INIT to false)
 11. `local_hearts`: the number of hearts the current user has. (INIT to 4)
 12. `enemy_hearts`: the number of hearts the nearest Pokémon has. (INIT to 4)
-13. `collection`: an array of Pokémon the user has collected; each Pokémon is represented as a struct that stores the Pokémon UUID and type. (INIT to 0)
+13. `collection`: an array of Pokémon the user has collected; each Pokémon is represented as a struct that stores the Pokémon UUID and type. (INIT to {0})
 14. `collection_length`: the number of Pokémon in the user's collection. (INIT to 0)
 
 In regards to `state.state_type`, there are four possible states in which
@@ -530,7 +530,7 @@ we give the identifier `UserTable` and a "Pokemon" collection of which we give
 the identifier `PokemonTable`.
 
 For consistency, we implement a document schema that documents inserted into
-either table adheres to. For the `UserTable`, documents must have the following
+either table adhere to. For the `UserTable`, documents must have the following
 JSON format:
 
 ```
@@ -663,7 +663,7 @@ latitude and longitude to be in the format of decimal degrees.
 /pokemon/nearby?latitude=<latitude in decimal degrees>&longitude=<longitude in decimal degrees>
 ```
 
-An example request would look as follows:
+An example request URL would look as follows:
 
 ```
 http://<server_address/pokemon/nearby?latitude=37.123456&longitude=-121.123456
