@@ -2,7 +2,7 @@
 
 ## Functional Specification
 
-### Launchpad functional description
+### LaunchPad Functional Description
 
 ![LaunchPad Diagran](./assets/launchpad-functional-diagram.png)
 
@@ -119,7 +119,7 @@ enemy loses all of their hearts, indicating a user win:
 
 ![Landing Page](./assets/fight-page-win.png)
 
-## Express.JS Server Functional Description
+### Express.JS Server Functional Description
 
 ![Landing Page](./assets/express-functional-diagram.png)
 
@@ -212,3 +212,63 @@ Pokémon is directly deleted from the DynamoDB Pokémon collection.
 
 For each of the above calls, the lower-level details of the response format is
 discussed in the **Implementation** section.
+
+### Website Functional Description
+
+![Landing Page](./assets/website-functional-diagram.png)
+
+For the website that we implement, we use the React.JS website framework and
+Vite packaging system to implement a world-map interface that shows all of the
+Pokémon and their locations in close to realtime.
+
+In particular, we leverage the Google Maps API to render a React component for a
+Google Map that uses the full view-port of the browser window. Then, we render a
+pin for the user's current location onto the map, and then we render all of the
+Pokémon from the DynamoDB Pokémon collection onto the map, using downloaded
+images of the Pokémon and rendering those Pokémon to their respective GPS
+coordinates on the map.
+
+In a background loop, we update the user's shown location and the status of all
+Pokémon every 5 seconds. In the accompanying website report to this final report
+document, we embed our map into a page on that website.
+
+Below we show an example of what our map looks like:
+
+![Landing Page](./assets/react-map.png)
+
+## System Architecture
+
+![Landing Page](./assets/system-architecture.png)
+
+Zooming out from the specific implemented behavior, the high-level system
+architecture involves the peripheral I/O devices connected to the LaunchPad, the
+LaunchPad itself, the Express.JS server, the AWS DynamoDB schema, and the
+React.JS map page.
+
+To begin with, we consider both the IR sensor and the GPS module to be input
+peripherals. The IR sensor detects button presses from the AT&T Universal IR
+Remote and sends those inputs to the LaunchPad where the game business logic
+then updates game state in response to those presses.
+
+The GPS module continuously samples the user's GPS coordinates by using
+satellite trilateration, and then sends these samples to the game business logic
+as well over UART.
+
+Next, the output peripheral on the LaunchPad is the OLED display. We preprocess
+downloaded images from the internet into RGB bitmaps that are stored in C
+arrays. Then, these images are rendered onto the screen depending on game state.
+
+As is described in the functionality section, we implement an Express.JS game
+server that communicates bidirectionally both with the LaunchPad and also with
+the AWS DynamoDB database.
+
+Then, we implement a data schema for our DynamoDB tables. In particular, we use
+two collections: a Users collection that stores one document per user, and a
+Pokémon collection that stores one document per each spawned Pokémon on the map.
+
+Finally, we implement a front-end map page using React.JS and the Google Maps
+API which reads the data stored in AWS DynamoDB to visualize the global state of
+the game on the map.
+
+The implementation details for each of these major components are discussed in
+the **Implementation** section.
