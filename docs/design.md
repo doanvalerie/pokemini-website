@@ -4,7 +4,7 @@
 
 ### LaunchPad Functional Description
 
-![LaunchPad Diagran](./assets/launchpad-functional-diagram.png)
+![LaunchPad Diagram](./assets/launchpad-functional-diagram.png)
 
 As specified in the **Description** section, a state machine transitioning
 between 4 different pages is implemented. These four pages are the landing page,
@@ -35,7 +35,7 @@ WiFi chip, serialized into a hexadecimal string. From the collection page, the
 user can navigate back to the landing page by pressing the number button `2` on
 the IR remote.
 
-![Landing Page](./assets/collection-page.png)
+![Collection Page](./assets/collection-page.png)
 
 In either the landing page or the collection page, a loop is run in the
 background where approximately every 5 seconds, the nearby Pokémon are queried
@@ -49,7 +49,7 @@ to trigger a "fight-or-flee" activation. The new enemy's GPS coordinates are
 applied to the landing page state. Then, if `shouldActivate` is true, a state
 transition is triggered to enter the fight-or-flee page.
 
-![Landing Page](./assets/fight-or-flee-page.png)
+![Fight or Flee Page](./assets/fight-or-flee-page.png)
 
 In the fight-or-flee page, we render text "Pokemon Detected Nearby" in a custom
 font in the center of the screen. Then right below, we indicate that the user
@@ -91,7 +91,7 @@ While in the fight page, the background process for querying the server for
 nearby Pokémon is halted. This way, the user will not be prompted to attack
 another Pokémon while they are still battling the current Pokémon.
 
-![Landing Page](./assets/fight-page-start.png)
+![Fight Page Starting State](./assets/fight-page-start.png)
 
 If the user loses all of their hearts, then the resulting behavior is similar to
 that of if the user decided to flee in the fight-or-flee page.
@@ -117,11 +117,11 @@ newly collected Pokémon.
 Here, we show an image of what the fight page looks like immediately after the
 enemy loses all of their hearts, indicating a user win:
 
-![Landing Page](./assets/fight-page-win.png)
+![Fight Page Win State](./assets/fight-page-win.png)
 
 ### Express.JS Server Functional Description
 
-![Landing Page](./assets/express-functional-diagram.png)
+![Express Functional Diagram](./assets/express-functional-diagram.png)
 
 The REST API server endpoint that processes the LaunchPad's network requests is
 written in Express.JS, a common Node.JS framework for writing web server
@@ -215,7 +215,7 @@ discussed in the **Implementation** section.
 
 ### Website Functional Description
 
-![Landing Page](./assets/website-functional-diagram.png)
+![Website Functional Diagram](./assets/website-functional-diagram.png)
 
 For the website that we implement, we use the React.JS website framework and
 Vite packaging system to implement a world-map interface that shows all of the
@@ -234,11 +234,11 @@ document, we embed our map into a page on that website.
 
 Below we show an example of what our map looks like:
 
-![Landing Page](./assets/react-map.png)
+![React Map](./assets/react-map.png)
 
 ## System Architecture
 
-![Landing Page](./assets/system-architecture.png)
+![System Architecture](./assets/system-architecture.png)
 
 Zooming out from the specific implemented behavior, the high-level system
 architecture involves the peripheral I/O devices connected to the LaunchPad, the
