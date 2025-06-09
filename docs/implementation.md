@@ -1,6 +1,6 @@
 # Implementation
 
-## GPS Driver Code
+## GPS driver code
 
 ### Configure UART interrupts
 The GPS module uses the UART protocol to transmit data. To set up communication
@@ -200,7 +200,7 @@ the GPS NMEA sentences at a much slower rate that is acceptable, allowing other
 program processes to have enough time to execute successfully at their own
 respective rates.
 
-## IR Sensor
+## IR sensor
 
 To decode the AT\&T IR remote transmissions, we copy over our solution from Lab
 3 ("IR Remote Control Texting Over a UART Link"). In particular, we use an AT&T
@@ -241,7 +241,7 @@ active state in the main game loop read the `encoding` variable once, then set
 `transmission_complete` to true, and then finally reset `transmission_complete`
 back to false.
 
-## React Map Page
+## React map page
 
 The map page for the website is implemented in TypeScript using the React.JS web
 component framework and the Vite packager with `SWC` (Speedy Web Compiler)
@@ -310,7 +310,7 @@ images.
 All of the `<AdvancedMarker />` components (both the user pin and all the
 Pokemon pins from DynamoDB) are set to update every 5 seconds.
 
-## Game Business Logic
+## Game business logic
 
 ### Global state and state types
 
@@ -521,7 +521,7 @@ the fight page to their own respective sub-sections in **Implementation** after
 these following sections. This is because they have more complicated
 functionality that requires more space to describe.
 
-## DynamoDB Database
+## DynamoDB database
 
 DynamoDB is the AWS offering of a NoSQL database.
 That is, the database stores collections of "documents", which are independent pieces of JSON data that can be uploaded, queried, mutated, and deleted.
@@ -587,7 +587,7 @@ An example Pokemon document might look as follows:
 For Pokemon `id` fields, we generate random UUIDv4 identifiers.
 For user ID fields, we construct the ID using the MAC address of the Launchpad WiFi chip serialized to a 12-digit hexadecimal string.
 
-## Express.JS Game Server
+## Express.JS game server
 
 On our Express.JS server, we create API handlers for four different HTTP requests: getting user data, getting the nearest Pokémon, adding a Pokémon to the user's collection, and deleting a Pokémon. Although JSON is the most common payload data format for structuring HTTP responses, we decide to separate fields in our HTTP response with simple newlines and no JSON formatting to make it easier to parse the response data in C.
 
@@ -640,7 +640,10 @@ An example request would look as follows:
 http://<server_address/pokemon/nearby?latitude=37.123456&longitude=-121.123456
 ```
 
-The API handler will first iterate through all Pokémon in the database and count the number of nearby Pokémon. For each Pokémon, we use the Pythagorean distance formula to calculate the Euclidean distance for how far that Pokémon is from our board's current `latitude` and `longitude`.
+The API handler will first iterate through all Pokémon in the database and count
+the number of nearby Pokémon. For each Pokémon, we use the Pythagorean distance
+formula to calculate the Euclidean distance for how far that Pokémon is from our
+board's current `latitude` and `longitude`.
 
 $$
 \begin{align*}
@@ -648,15 +651,30 @@ pLatitude &= pokemon.location.latitude \\
 pLongitude &= pokemon.location.longitude \\
 diff\_x &= |pLatitude - latitude| \\
 diff\_y &= |pLongitude - longitude| \\
-dist &= \sqrt{diff\_x^2 + diff\_y^2} \\ 
+dist &= \sqrt{diff\_x^2 + diff\_y^2} \\
 \end{align*}
 $$
 
-If `dist` is less than the `POKEMON_RADIUS` of 100-meters, we increment our count of nearby Pokémon. We require at least 6 Pokémon to be located within the user's 100-meter radius. Until the count reaches this threshold, we spawn more Pokémon within the user's radius. 
+If `dist` is less than the `POKEMON_RADIUS` of 100-meters, we increment our
+count of nearby Pokémon. We require at least 6 Pokémon to be located within the
+user's 100-meter radius. Until the count reaches this threshold, we spawn more
+Pokémon within the user's radius. 
 
-To add a nearby Pokémon, we spawn it is within a 100-meter radius to the user but outside an `ACTIVATION_RADIUS` of 10-meters. By spawning the Pokémon outside the `ACTIVATION_RADIUS`, we require the user to walk to the nearest Pokémon. Otherwise, the "fight or flee" page can trigger without physical movement from the user. To account for GPS inaccuracies and prevent Pokémon from spawning right at the 10-meter activation boundary, we create another constant `ACTIVATE_RAD_WITH_MARGIN` and set it to 3 * `ACTIVATION_RADIUS`, which we use to spawn new Pokémon at least 30-meters away from the user.
+To add a nearby Pokémon, we spawn it is within a 100-meter radius to the user
+but outside an `ACTIVATION_RADIUS` of 10-meters. By spawning the Pokémon outside
+the `ACTIVATION_RADIUS`, we require the user to walk to the nearest Pokémon.
+Otherwise, the "fight or flee" page can trigger without physical movement from
+the user. To account for GPS inaccuracies and prevent Pokémon from spawning
+right at the 10-meter activation boundary, we create another constant
+`ACTIVATE_RAD_WITH_MARGIN` and set it to 3 * `ACTIVATION_RADIUS`, which we use
+to spawn new Pokémon at least 30-meters away from the user.
 
-For our calculations, we generate a random radius between `ACTIVATE_RAD_WITH_MARGIN` and `POKEMON_RADIUS` at which the Pokémon will spawn from the user. Next, we generate a random angle between 0 to $2\pi$ radians, which defines the direction from the user at which the Pokémon will spawn. This defines the polar coordinates of the new Pokémon with respect to the user's location.
+For our calculations, we generate a random radius between
+`ACTIVATE_RAD_WITH_MARGIN` and `POKEMON_RADIUS` at which the Pokémon will spawn
+from the user. Next, we generate a random angle between 0 to $2\pi$ radians,
+which defines the direction from the user at which the Pokémon will spawn. This
+defines the polar coordinates of the new Pokémon with respect to the user's
+location.
 
 $$
 \begin{align*}
@@ -667,22 +685,45 @@ randAngle &= Math.random() * 2 * \pi
 \end{align*}
 $$
 
-To calculate the latitude and longitude of the new Pokémon, we convert its location from polar to cartesian coordinates. By using the formulas $x = r * \cos{\theta}$ and $y = r * \sin{\theta}$, we calculate the change in $x$ and $y$ between the user and Pokémon. This change in $x$ is added to the user's latitude, and the resulting sum is the latitude of the new Pokémon. Similarly, the new Pokémon's longitude is calculated by adding the change in $y$ with the user's longitude.
+To calculate the latitude and longitude of the new Pokémon, we convert its
+location from polar to cartesian coordinates. By using the formulas $x = r *
+\cos{\theta}$ and $y = r * \sin{\theta}$, we calculate the change in $x$ and $y$
+between the user and Pokémon. This change in $x$ is added to the user's
+latitude, and the resulting sum is the latitude of the new Pokémon. Similarly,
+the new Pokémon's longitude is calculated by adding the change in $y$ with the
+user's longitude.
 
 $$
 \begin{align*}
-xOffset &= randRadius * cos(randAngle) \\ 
+xOffset &= randRadius * cos(randAngle) \\
 yOffset &= randRadius * sin(randAngle) \\
 newX &= latitude + xOffset \\
 newY &= longitude + yOffset \\
-\end{align*}
-$$
+\end{align*} $$
 
-We define the array `POKEMON_TYPES` to specify the 5 possible characters that can spawn: a Pikachu, Jigglypuff, Piplup, Eevee, and Lickitung. We generate a random number between 0 to 4, which is used to index into `POKEMON_TYPES` and assign a type to the new Pokémon. After generating a UUIDv4 with the `crypto` library, we use the newly calculated latitude, longitude, and type to add the new Pokémon to `PokemonTable` in AWS DynamoDB.
+We define the array `POKEMON_TYPES` to specify the 5 possible characters that
+can spawn: a Pikachu, Jigglypuff, Piplup, Eevee, and Lickitung. We generate a
+random number between 0 to 4, which is used to index into `POKEMON_TYPES` and
+assign a type to the new Pokémon. After generating a UUIDv4 with the `crypto`
+library, we use the newly calculated latitude, longitude, and type to add the
+new Pokémon to `PokemonTable` in AWS DynamoDB.
 
-Once the minimum threshold for nearby Pokémon has been satisfied, we iterate through all Pokémon once more and use the Pythagorean distance formula to calculate the Pokémon's distance from the user. As we scan through the Pokémon, we keep track of the nearest Pokémon and construct an array of Pokémon that are within the user's 10-meter activation radius. Besides the nearest Pokémon, we delete all other Pokémon that are within the user's 10-meter activation radius. By doing so, we prevent multiple "fight or flee" pages from immediately rendering one after another while the user remains stationary. The API handler returns a payload that contains the nearest Pokémon's data and whether a "fight or flight" page should activate.
+Once the minimum threshold for nearby Pokémon has been satisfied, we iterate
+through all Pokémon once more and use the Pythagorean distance formula to
+calculate the Pokémon's distance from the user. As we scan through the Pokémon,
+we keep track of the nearest Pokémon and construct an array of Pokémon that are
+within the user's 10-meter activation radius. Besides the nearest Pokémon, we
+delete all other Pokémon that are within the user's 10-meter activation radius.
+By doing so, we prevent multiple "fight or flee" pages from immediately
+rendering one after another while the user remains stationary. The API handler
+returns a payload that contains the nearest Pokémon's data and whether a "fight
+or flight" page should activate.
 
-When we request for the nearest Pokémon at latitude 38.537293 and longitude -121.754578, we get the following response. According to the payload, the `false` indicates that this Pokémon is not within the user's 10-meter radius, so the "fight or flee" page should *not* be triggered. The following lines include the nearest Pokémon's UUID, type, latitude, and longitude.
+When we request for the nearest Pokémon at latitude 38.537293 and longitude
+-121.754578, we get the following response. According to the payload, the
+`false` indicates that this Pokémon is not within the user's 10-meter radius, so
+the "fight or flee" page should *not* be triggered. The following lines include
+the nearest Pokémon's UUID, type, latitude, and longitude.
 
 ```
 false
@@ -694,7 +735,12 @@ jigglypuff
 
 ### Capture Pokémon
 
-If the user has won the mini-game on the fight page, the Pokémon that had activated the "fight or flee" page is appended to the user's collection. As a result, we make a HTTP POST request to the following route. The user's MAC address is passed as a path parameter for `:userId`. `state.enemy_uuid` – the UUID of the nearest Pokémon that had activated the "fight or flee" page – is used for `:pokemonId`.
+If the user has won the mini-game on the fight page, the Pokémon that had
+activated the "fight or flee" page is appended to the user's collection. As a
+result, we make a HTTP POST request to the following route. The user's MAC
+address is passed as a path parameter for `:userId`. `state.enemy_uuid` – the
+UUID of the nearest Pokémon that had activated the "fight or flee" page – is
+used for `:pokemonId`.
 
 ```
 /users/:userId/pokemon/:pokemonId
@@ -702,38 +748,99 @@ If the user has won the mini-game on the fight page, the Pokémon that had activ
 
 ### Delete Pokémon
 
-In addition to capturing a Pokémon, there are two other cases where a Pokémon should be deleted: the user chose to flee on the "flight or flee" page, or the user has lost the fight mini-game. For both cases, we make a HTTP DELETE request to remove the Pokémon from the `PokemonTable` database. This resource is defined at the following route, where the Pokémon's UUID is used as a path parameter to define the Pokémon ID.
+In addition to capturing a Pokémon, there are two other cases where a Pokémon
+should be deleted: the user chose to flee on the "flight or flee" page, or the
+user has lost the fight mini-game. For both cases, we make a HTTP DELETE request
+to remove the Pokémon from the `PokemonTable` database. This resource is defined
+at the following route, where the Pokémon's UUID is used as a path parameter to
+define the Pokémon ID.
 
 ```
 /pokemon/:pokemonId
 ```
 
-This operation is performed on the nearest Pokémon that had activated the "fight or flee" page. We store this Pokémon's UUID in `state.enemy_uuid`.
+This operation is performed on the nearest Pokémon that had activated the "fight
+or flee" page. We store this Pokémon's UUID in `state.enemy_uuid`.
 
-## Fight or Flee
+## Fight or flee
 
-When we make HTTP GET requests for the nearest Pokémon, the response includes a boolean that indicates whether that Pokémon is within the 10-meter activation radius of the user. After parsing the response, the boolean is stored in `state.should_fight`. While the user is on the landing page or collection page, each iteration of our game loop checks whether this variable is set to true. If so, `state.state_type` is changed to `STATE_FIGHT_OR_FLEE_PAGE`. As a result, the next iteration of the game loop will render the "fight or flee" page, where the user is informed that a nearby Pokémon has been detected. While the user is on this page, the program keeps looping until it gets valid user input from the IR remote. In particular, the user should select button 1 to fight or button 2 to flee. If the user selects to fight, `state.state_type` is assigned `STATE_FIGHT_PAGE`. Otherwise, `state.state_type` is set to `STATE_LANDING_PAGE`. The next iteration of the game loop will redirect the user to the appropriate page based on their input.
+When we make HTTP GET requests for the nearest Pokémon, the response includes a
+boolean that indicates whether that Pokémon is within the 10-meter activation
+radius of the user. After parsing the response, the boolean is stored in
+`state.should_fight`. While the user is on the landing page or collection page,
+each iteration of our game loop checks whether this variable is set to true. If
+so, `state.state_type` is changed to `STATE_FIGHT_OR_FLEE_PAGE`. As a result,
+the next iteration of the game loop will render the "fight or flee" page, where
+the user is informed that a nearby Pokémon has been detected. While the user is
+on this page, the program keeps looping until it gets valid user input from the
+IR remote. In particular, the user should select button 1 to fight or button 2
+to flee. If the user selects to fight, `state.state_type` is assigned
+`STATE_FIGHT_PAGE`. Otherwise, `state.state_type` is set to
+`STATE_LANDING_PAGE`. The next iteration of the game loop will redirect the user
+to the appropriate page based on their input.
 
-## Fight Mini Game
+## Fight mini game
 
-When the user selects to fight the Pokémon on the "fight or flee" page, we render the fight page on the OLED. The fight page displays bitmap images of hearts to represent the health of the user and the enemy. Both the user and the enemy start with four hearts each. Below the heart images, we render instructions and fight results to guide the user through the game. Essentially, the user utilizes the IR remote to select among buttons 0 to 9, and each button press harms either the user or the enemy. Each digit button is mapped to one of the following `GameButtonStates` states: `USER_BUTTON`, `ENEMY_BUTTON`, and `TAKEN`. Pressing a button of state `USER_BUTTON` means that the user will win the round, and the enemy will lose a heart. Similarly, pressing a button of state `ENEMY_BUTTON` means that the enemy will win the round, and the user will lose a heart. After an enemy or user selects a button, it is assigned the `TAKEN state.
+When the user selects to fight the Pokémon on the "fight or flee" page, we
+render the fight page on the OLED. The fight page displays bitmap images of
+hearts to represent the health of the user and the enemy. Both the user and the
+enemy start with four hearts each. Below the heart images, we render
+instructions and fight results to guide the user through the game. Essentially,
+the user utilizes the IR remote to select among buttons 0 to 9, and each button
+press harms either the user or the enemy. Each digit button is mapped to one of
+the following `GameButtonStates` states: `USER_BUTTON`, `ENEMY_BUTTON`, and
+`TAKEN`. Pressing a button of state `USER_BUTTON` means that the user will win
+the round, and the enemy will lose a heart. Similarly, pressing a button of
+state `ENEMY_BUTTON` means that the enemy will win the round, and the user will
+lose a heart. After an enemy or user selects a button, it is assigned the `TAKEN`
+state.
 
-When we initialize the fight, we iterate through the array `enum GameButtonState game_buttons[10]` to randomly assign half of it with the `USER_BUTTON` state and the other half with the `ENEMY_BUTTON` state. Then, we render the instructions. When the user is done reading the rules, they can select any digit button to start the game.
-Random numbers are generated using the C standard library psuedorandom number generator `srand()`.
+When we initialize the fight, we iterate through the array
+`enum GameButtonState game_buttons[10]` to randomly assign half of it with the
+`USER_BUTTON` state and the other half with the `ENEMY_BUTTON` state. Then, we
+render the instructions. When the user is done reading the rules, they can
+select any digit button to start the game. Random numbers are generated using
+the C standard library psuedorandom number generator `srand()`.
 
-The user and the enemy take turns choosing a button until one of them reaches zero hearts. The user makes the first move in the game. If the user chooses any button other than 0 to 9, a message is displayed that an invalid button has been pressed, and the user must choose from only buttons 0 to 9. If the user chooses a button of state `TAKEN`, the OLED displays a message to choose an available button, and it lists all the digit buttons that have been assigned `TAKEN`.
+The user and the enemy take turns choosing a button until one of them reaches
+zero hearts. The user makes the first move in the game. If the user chooses any
+button other than 0 to 9, a message is displayed that an invalid button has been
+pressed, and the user must choose from only buttons 0 to 9. If the user chooses
+a button of state `TAKEN`, the OLED displays a message to choose an available
+button, and it lists all the digit buttons that have been assigned `TAKEN`.
 
-When it is the enemy's turn to make a move, the program keeps selecting a random button from 0 to 9 until it finds a button that is *not* of state `TAKEN`. The enemy uses this button as their move.
+When it is the enemy's turn to make a move, the program keeps selecting a random
+button from 0 to 9 until it finds a button that is *not* of state `TAKEN`. The
+enemy uses this button as their move.
 
-After the enemy or user makes a valid move, the OLED shows a message that states which button has been selected, and whether that player has won or lost. When a player loses a round, their heart count is decremented, and a bitmap image of a broken heart replaces one of their full hearts.
+After the enemy or user makes a valid move, the OLED shows a message that states
+which button has been selected, and whether that player has won or lost. When a
+player loses a round, their heart count is decremented, and a bitmap image of a
+broken heart replaces one of their full hearts.
 
-If the user is the first player to lose all four hearts, a message is displayed that the Pokémon has escaped. We assign `state.state_type` to `STATE_LANDING_PAGE` to redirect the user to the landing page. Furthermore, we make an HTTP DELETE request to remove the Pokémon from the database. The user can select any button from 0 to 9 to exit the fight page.
+If the user is the first player to lose all four hearts, a message is displayed
+that the Pokémon has escaped. We assign `state.state_type` to
+`STATE_LANDING_PAGE` to redirect the user to the landing page. Furthermore, we
+make an HTTP DELETE request to remove the Pokémon from the database. The user
+can select any button from 0 to 9 to exit the fight page.
 
-If the enemy is the first to lose all their hearts, a message informs the user that they have successfully collected the Pokémon. We set `state.state_type` to `STATE_COLLECTION_PAGE` to redirect the user to the collection page, where they can view the new Pokémon that has been added to their collection. We also make a HTTP POST request to add the Pokémon to the user's collection. As previously mentioned, this API will not only update the user's collection but also delete the Pokémon from `PokemonTable` – the database of available characters to be captured. We append the new Pokémon to `state.collection` and increment `state.collection_length`.
+If the enemy is the first to lose all their hearts, a message informs the user
+that they have successfully collected the Pokémon. We set `state.state_type` to
+`STATE_COLLECTION_PAGE` to redirect the user to the collection page, where they
+can view the new Pokémon that has been added to their collection. We also make a
+HTTP POST request to add the Pokémon to the user's collection. As previously
+mentioned, this API will not only update the user's collection but also delete
+the Pokémon from `PokemonTable` – the database of available characters to be
+captured. We append the new Pokémon to `state.collection` and increment
+`state.collection_length`.
 
 ## Graphics API
 
-To include images and typography on the OLED, we render bitmaps that use the 16-bit RGB format. We used Google to find images of characters and icons, and utilized a [file to C style array converter](https://notisrac.github.io/FileToCArray/) to resize and convert a colored image into an array of `unsigned int`. We include a sample output of converting an image to an array below.
+To include images and typography on the OLED, we render bitmaps that use the
+16-bit RGB format. We used Google to find images of characters and icons, and
+utilized a [file to C style array converter](https://notisrac.github.io/FileToCArray/)
+to resize and convert a colored image into an array of `unsigned int`. We
+include a sample output of converting an image to an array below.
 
 ```
 #define PIKACHU_BALLOON_HEIGHT 16
@@ -751,6 +858,12 @@ const unsigned int pikachu_balloon[]  = {
 };
 ```
 
-To display text in a Pokemon-esque format on the OLED, we used the site [Textcraft](https://textcraft.net/style/Textcraft/pokemon) to generate png images of text. Afterwards, we converted these images to bitmaps using the file to C style array converter.
+To display text in a Pokemon-esque format on the OLED, we used the site
+[Textcraft](https://textcraft.net/style/Textcraft/pokemon) to generate png
+images of text. Afterwards, we converted these images to bitmaps using the file
+to C style array converter.
 
-To display a bitmap, we defined an x-offset and y-offset in pixels to render the image at a specific location on the OLED screen. Using the offsets as well as the height and width of the bitmap, we applied `drawPixel(int x, int y, unsigned int color)` from `Adafruit_GFX.h` while iterating through the bitmap array.
+To display a bitmap, we defined an x-offset and y-offset in pixels to render the
+image at a specific location on the OLED screen. Using the offsets as well as
+the height and width of the bitmap, we applied `drawPixel(int x, int y, unsigned int color)`
+from `Adafruit_GFX.h` while iterating through the bitmap array.
