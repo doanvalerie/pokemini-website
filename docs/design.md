@@ -229,8 +229,8 @@ images of the Pokémon and rendering those Pokémon to their respective GPS
 coordinates on the map.
 
 In a background loop, we update the user's shown location and the status of all
-Pokémon every 5 seconds. In the accompanying website report to this final report
-document, we embed our map into a page on that website.
+Pokémon every 5 seconds.
+On this website we embed a link to the actual map, which is [located here](https://nicbk.com/eec172/map/).
 
 Below we show an example of what our map looks like:
 
