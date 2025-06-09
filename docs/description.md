@@ -173,7 +173,7 @@ the internet using a WLAN adapter.
 The `cc3200tool` is a serial flash utility that allows us to program flash
 memory and open a pyserial terminal for UART communication between the CC3200
 SoC and our local machine. The command-line utility can be installed from this
-\href{https://github.com/toniebox-reverse-engineering/cc3200tool}{\color{blue}repository}.
+[repository](https://github.com/toniebox-reverse-engineering/cc3200tool).
 To open a serial port on our local machine, we execute the following commands
 and specify our baud rate as 115200.
 

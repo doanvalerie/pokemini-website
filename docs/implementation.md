@@ -171,7 +171,7 @@ The two checksums `CK_A` and `CK_B` are computed as follows:
 
 ![Landing Page](./assets/ublox_cksum.png)
 
-CK\_A and CK\_B are appended to the payload.
+CK_A and CK_B are appended to the payload.
 
 Finally, this entire message is written at once to the UBlox chip over UART. We
 remove power from the GPS module for 10 seconds and then re-attach power to
