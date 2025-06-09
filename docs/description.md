@@ -17,7 +17,7 @@ fight page. We describe these pages in greater detail below.
 2. To view all the Pokémon that the user has collected, they can navigate to a
    collection page that displays character sprites for each Pokémon in their
    collection. 
-3. When the user enters a 10-meter radius of a Pokémon, a "fight or flee" page
+3. When the user enters a 10-meter radius of a Pokémon, a fight-or-flee page
    is rendered. The user is informed that a Pokémon nearby has been detected.
    The user utilizes an IR remote to input whether they will flee or fight the
    Pokémon. If the user flees, they are redirected to the landing page.
@@ -57,10 +57,10 @@ physically moves, the LaunchPad periodically makes HTTP GET requests for the
 Pokémon closest to them. When the server makes these distance calculations, it
 performs additional calculations to ensure that enough Pokémon have spawned
 around the user. In particular, the server will calculate if there are at least
-6 existing Pokémon in a 100 meter radius of the user; if this threshold is not
-met, the server generates more Pokémon in the user's 100 meter radius. If the
+6 existing Pokémon in a 100-meter radius of the user; if this threshold is not
+met, the server generates more Pokémon in the user's 100-meter radius. If the
 user is within a 10-meter radius of a Pokémon, the server informs the LaunchPad
-that a fight can be activated. The "fight or flee" page is rendered on the OLED,
+that a fight can be activated. The fight-or-flee page is rendered on the OLED,
 and the user has the choice to flee from the Pokémon or fight via a turn-based
 attack mini-game. If the user fights the Pokémon and wins, the Pokémon is added
 to the user's collection. Both a fight and flee will result in the Pokémon being
@@ -92,9 +92,9 @@ NMEA-0183 sentence begins with the character "$" followed by the talker
 identifier and the sentence type. For our project, we parse data from the
 "GNGGA" sentence. The talker identifier "GN" indicates that multiple satellite
 systems, particularly from several constellations of the Global Navigation
-Satellite Systems (GNSS), are used to produce data (footnote). "GGA" denotes the
-sentence type as Global Positioning System Fix Data, which consists of 16
-fields. The third and fifth fields are latitude and longitude, respectively.
+Satellite Systems (GNSS), are used to produce data. "GGA" denotes the sentence
+type as Global Positioning System Fix Data, which consists of 16 fields. The
+third and fifth fields are latitude and longitude, respectively.
 
 ## Protocols
 
@@ -168,7 +168,7 @@ cc3200tool term 115200
 ```
 
 We also use the `cc3200tool` to write to flash memory, ensuring that our project
-is stand-alone. As mentioned in Lab 1 ("Development Tools Tutorial and Lab
+is stand-alone. As mentioned in lab 1 ("Development Tools Tutorial and Lab
 Introduction"), we run the following command to write `pokemon-go.bin` to
 `/sys/mcuimg.bin`. After the program has been written to non-volatile memory,
 the application will run once the LaunchPad is connected to power. Pressing the
