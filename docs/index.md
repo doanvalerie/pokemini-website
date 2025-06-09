@@ -1,5 +1,3 @@
-<!-- ![Pokemini Go](./assets/pokemini-go.png) -->
-
 # Introduction
 
 ## Overview
@@ -29,6 +27,6 @@ the Pokémon and add it to their collection.
 
 <iframe width="1120" height="630" src="https://drive.google.com/file/d/1El7oD6GaejIxqAbiH13hDcx_2CiSFtKk/preview" title="Capturing a Pokemon" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen allow="autoplay"></iframe>
 
-### Map Page Functionality
+### Map page functionality
 
 <iframe width="1120" height="630" src="https://drive.google.com/file/d/1a0wD93DH9kUI-TY9Jow0W0K7uxWsIEgd/preview" title="Capturing a Pokemon" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen allow="autoplay"></iframe>

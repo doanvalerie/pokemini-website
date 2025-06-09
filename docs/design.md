@@ -1,8 +1,8 @@
 # Design
 
-## Functional Specification
+## Functional specification
 
-### LaunchPad Functional Description
+### LaunchPad
 
 ![LaunchPad Diagram](./assets/launchpad-functional-diagram.png)
 
@@ -119,7 +119,7 @@ enemy loses all of their hearts, indicating a user win:
 
 ![Fight Page Win State](./assets/fight-page-win.png)
 
-### Express.JS Server Functional Description
+### Express.JS server
 
 ![Express Functional Diagram](./assets/express-functional-diagram.png)
 
@@ -213,7 +213,7 @@ Pokémon is directly deleted from the DynamoDB Pokémon collection.
 For each of the above calls, the lower-level details of the response format is
 discussed in the **Implementation** section.
 
-### Website Functional Description
+### Website
 
 ![Website Functional Diagram](./assets/website-functional-diagram.png)
 
@@ -236,7 +236,7 @@ Below we show an example of what our map looks like:
 
 ![React Map](./assets/react-map.png)
 
-## System Architecture
+## System architecture
 
 ![System Architecture](./assets/system-architecture.png)
 

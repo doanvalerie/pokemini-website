@@ -3,6 +3,7 @@
 ## GPS driver code
 
 ### Configure UART interrupts
+
 The GPS module uses the UART protocol to transmit data. To set up communication
 between the CC3200 LaunchPad and GPS module, we enable UART1 on SysConfig and
 configure GPIO 11 (Pin 02) as the RX pin and GPIO 03 (Pin 58) as the TX pin. In
@@ -255,8 +256,8 @@ npm create vite@latest pokemini-website --\
 
 In this application, we use the `react-router@7` npm package to implement
 handling the different pages on the website. For simplicity sake, we simply
-define a single route with a `HashRouter`, thus meaning that we render our `<Map/>`
-component to the URL
+define a single route with a `HashRouter`, thus meaning that we render our
+`<Map/>` component to the URL
 
 ```
 https://server.nicbk.com/#/map
@@ -294,6 +295,7 @@ Then, we set the center view of the map to be at GPS coordinates
 lat: 38.538496,
 lng: -121.757724
 ```
+
 which is approximately at the center of UC Davis campus.
 
 Then, we add an `<AdvancedMarker />` component, to the user's GPS coordinates,
@@ -350,9 +352,8 @@ When a new state has been assigned to `state.state_type`, we set
 we should draw the page on the OLED. After iterating through the game loop once
 and rendering the new state, we set `state.first_run` to false, so we can
 avoid re-rendering a static page on the OLED each time state in that page
-updates.
-According to our game loop below, the game state determines which page to render
-and logic to perform.
+updates. According to our game loop below, the game state determines which page
+to render and logic to perform.
 
 ```
 void GameLoop(void)
@@ -377,25 +378,24 @@ void GameLoop(void)
 }
 ```
 
-If we are in `STATE_LANDING_PAGE`, the function `LandingState()` is
-executed. This function checks if `state.first_run` is true. If so, it
-draws the static images for the home page on the OLED. While there are no nearby
-Pokémon to trigger the "fight or flee" page, the user will remain on the landing
-page unless they switch to the collection page, and `LandingState()` keeps
-executing for every iteration of the game loop. This function also reads
-`state.mcu_latitude` and `state.mcu_longitude`, and writes these
-values to the display if any digits have changed. These `mcu` state
-variables represent the GPS coordinates of the launchpad. As is discussed in the
-earlier GPS module description, after every 60000 iterations of the game loop we
-enable the GPS UART interrupt to update `state.mcu_latitude` and
-`state.mcu_longitude`. For each call to `LandingState()`, we read the
-boolean variable `transmission_complete`, which indicates whether the IR
-decoder has read a valid signal from the remote. If `transmission_complete`
-is true and the encoding maps to button 1, then the user has switched from the
-landing page to the collection page. Therefore, we update
-`state.state_type` to `STATE_COLLECTION_PAGE` and set
-`state.first_run` to true. The next iteration of the game loop will render
-the collection page on the OLED.
+If we are in `STATE_LANDING_PAGE`, the function `LandingState()` is executed.
+This function checks if `state.first_run` is true. If so, it draws the static
+images for the home page on the OLED. While there are no nearby Pokémon to
+trigger the "fight or flee" page, the user will remain on the landing page
+unless they switch to the collection page, and `LandingState()` keeps executing
+for every iteration of the game loop. This function also reads 
+`state.mcu_latitude` and `state.mcu_longitude`, and writes these values to the
+display if any digits have changed. These `mcu` state variables represent the
+GPS coordinates of the launchpad. As is discussed in the earlier GPS module
+description, after every 60000 iterations of the game loop we enable the GPS
+UART interrupt to update `state.mcu_latitude` and `state.mcu_longitude`. For
+each call to `LandingState()`, we read the boolean variable
+`transmission_complete`, which indicates whether the IR decoder has read a valid
+signal from the remote. If `transmission_complete` is true and the encoding maps
+to button 1, then the user has switched from the landing page to the collection
+page. Therefore, we update `state.state_type` to `STATE_COLLECTION_PAGE` and set
+`state.first_run` to true. The next iteration of the game loop will render the
+collection page on the OLED.
 
 When we render the collection page, we iterate through the array
 `state.collection` of type `struct PokemonCollectionItem`.
@@ -409,21 +409,20 @@ struct PokemonCollectionItem {
 
 As we iterate through the collection, we read `type` to determine which
 character sprite to draw onto the OLED. There are five possible Pokémon types:
-`POKEMON_JIGGLYPUFF`, `POKEMON_PIKACHU`, `POKEMON_PIPLUP`,
-`POKEMON_LICKITUNG`, `POKEMON_EEVEE`. Using logic similar to the
-landing page, we keep executing `CollectionState()` for every iteration of
-the game loop. At the end of each function call, we check if
-`transmission_complete` is true and if the IR button `encoding`
-variable maps to button 2. If true, then the user has switched from the
-collection page to the landing page. Therefore, we update
-`state.state_type` to `STATE_LANDING_PAGE` and set
-`state.first_run` to true. The next iteration of the game loop will render
-the landing page on the OLED.
+`POKEMON_JIGGLYPUFF`, `POKEMON_PIKACHU`, `POKEMON_PIPLUP`, `POKEMON_LICKITUNG`,
+`POKEMON_EEVEE`. Using logic similar to the landing page, we keep executing
+`CollectionState()` for every iteration of the game loop. At the end of each
+function call, we check if `transmission_complete` is true and if the IR button
+`encoding` variable maps to button 2. If true, then the user has switched from
+the collection page to the landing page. Therefore, we update `state.state_type`
+to `STATE_LANDING_PAGE` and set `state.first_run` to true. The next iteration of
+the game loop will render the landing page on the OLED.
 
-When in either `STATE_LANDING_PAGE` or the `STATE_COLLECTION_PAGE`,
-the main game loop will execute the function `http_get_nearby_pokemon()`.
-After every 100,000 iterations of the main game loop, this function will make an
-HTTP GET request to our Express.JS server at address `http://server.nicbk.com:42812/pokemon/nearby`.
+When in either `STATE_LANDING_PAGE` or the `STATE_COLLECTION_PAGE`, the main
+game loop will execute the function `http_get_nearby_pokemon()`. After every
+100,000 iterations of the main game loop, this function will make an HTTP GET
+request to our Express.JS server at address
+`http://server.nicbk.com:42812/pokemon/nearby`.
 
 Then, the `getNearbyProcessMessage()` function will update the
 `state.enemy_latitude`, `state.enemy_longitude`, and `state.should_fight`
@@ -480,9 +479,9 @@ timers that count iterations up to some pre-defined threshold before the actual
 respective behavior for that function is actually executed. In this way, we
 implement a system where each procedure only performs its intended action after
 some pre-defined interval period, where in the meantime it simply just
-increments a counter and then yields control back to `GameLoop()`.
-First, we first enter the function corresponding to handling logic specific to
-the currently active page state. As is discussed earlier, we have a boolean
+increments a counter and then yields control back to `GameLoop()`. First, we
+first enter the function corresponding to handling logic specific to the
+currently active page state. As is discussed earlier, we have a boolean
 variable `state.first_run` that is initially set to false right before
 transitioning to a new state, and which is then set to true after the first
 iteration of that particular state function completes. In this way we make the
@@ -490,18 +489,18 @@ initial state logic, including rendering to the OLED, only execute once for a
 particular state. Then, after the logic for a single iteration of that state
 function is finished, control is returned back up to the `GameLoop()`.
 
-The next procedure to be run is `PollEnableGPS()`.
-As is discussed earlier, this function only enables the GPS UART data handler
-after 60,000 main loop iterations. What will happen is that
-`PollEnableGPS()` will immediately yield control back to `GameLoop()`
-unless the counter `gpg_read_timeout` reaches 60,000. Then, when
-`gpg_read_timeout` reaches 60,000, then `PollEnableGPS()` will enable
-the UART1 GPS RX interrupt handler, allowing the Launchpad to process an NMEA
-GNGGA sentence before then disabling the UART1 GPS RX interrupt handler again,
-and thus yielding time back to other interrupt handlers and other synchronous
-logic.
+The next procedure to be run is `PollEnableGPS()`. As is discussed earlier, this
+function only enables the GPS UART data handler after 60,000 main loop
+iterations. What will happen is that `PollEnableGPS()` will immediately yield
+control back to `GameLoop()` unless the counter `gpg_read_timeout` reaches
+60,000. Then, when `gpg_read_timeout` reaches 60,000, then `PollEnableGPS()`
+will enable the UART1 GPS RX interrupt handler, allowing the Launchpad to
+process an NMEA GNGGA sentence before then disabling the UART1 GPS RX interrupt
+handler again, and thus yielding time back to other interrupt handlers and other
+synchronous logic.
 
-Then, the next function in the main loop is the call to `http_get_nearby_pokemon()`.
+Then, the next function in the main loop is the call to
+`http_get_nearby_pokemon()`.
 
 This function is only called if the `SetupNetwork()` function is `setup.c` has
 successfully executed, ensuring that we have a valid socket initialized. As is
@@ -510,7 +509,7 @@ discussed earlier, we immediately yield control back to the game loop unless
 request to retrieve the information for the nearest Pokemon.
 
 Finally, we add the if statement to "asynchronously" switch into the
-Fight-or-Flee page into the bottom of the game loop. This check is triggered
+fight-or-flee page into the bottom of the game loop. This check is triggered
 after every 10,000 iterations of the game loop, which also helps to increase
 efficiency by yielding to other procedures when necessary. As is discussed
 earlier, the `state.state_type` field is only read for transition if in the
@@ -523,12 +522,16 @@ functionality that requires more space to describe.
 
 ## DynamoDB database
 
-DynamoDB is the AWS offering of a NoSQL database.
-That is, the database stores collections of "documents", which are independent pieces of JSON data that can be uploaded, queried, mutated, and deleted.
-We implement two collections (also known as "tables") in our DynamoDB database: a "Users" collection of which we give the identifier `UserTable` and a "Pokemon" collection of which we give the identifier `PokemonTable`.
+DynamoDB is the AWS offering of a NoSQL database. That is, the database stores
+collections of "documents", which are independent pieces of JSON data that can
+be uploaded, queried, mutated, and deleted. We implement two collections
+(also known as "tables") in our DynamoDB database: a "Users" collection of which
+we give the identifier `UserTable` and a "Pokemon" collection of which we give
+the identifier `PokemonTable`.
 
-For consistency, we implement a document schema that documents inserted into either table adheres to.
-For the `UserTable`, documents must have the following JSON format:
+For consistency, we implement a document schema that documents inserted into
+either table adheres to. For the `UserTable`, documents must have the following
+JSON format:
 
 ```
 {
@@ -584,25 +587,42 @@ An example Pokemon document might look as follows:
 }
 ```
 
-For Pokemon `id` fields, we generate random UUIDv4 identifiers.
-For user ID fields, we construct the ID using the MAC address of the Launchpad WiFi chip serialized to a 12-digit hexadecimal string.
+For Pokemon `id` fields, we generate random UUIDv4 identifiers. For user ID
+fields, we construct the ID using the MAC address of the Launchpad WiFi chip
+serialized to a 12-digit hexadecimal string.
 
 ## Express.JS game server
 
-On our Express.JS server, we create API handlers for four different HTTP requests: getting user data, getting the nearest Pokémon, adding a Pokémon to the user's collection, and deleting a Pokémon. Although JSON is the most common payload data format for structuring HTTP responses, we decide to separate fields in our HTTP response with simple newlines and no JSON formatting to make it easier to parse the response data in C.
+On our Express.JS server, we create API handlers for four different HTTP
+requests: getting user data, getting the nearest Pokémon, adding a Pokémon to
+the user's collection, and deleting a Pokémon. Although JSON is the most common
+payload data format for structuring HTTP responses, we decide to separate fields
+in our HTTP response with simple newlines and no JSON formatting to make it
+easier to parse the response data in C.
 
 ### Get user
 
-When the application is executed, the LaunchPad will immediately attempt to connect to the access point and server. If a connection has been established, we use `sl_NetCfgGet()` to retrieve the MAC address of the LaunchPad. The MAC address serves as a unique identifier to differentiate users. Afterwards, we make a HTTP GET request to retrieve user data from the following API route, using the MAC address as a path parameter to define the user ID. 
+When the application is executed, the LaunchPad will immediately attempt to
+connect to the access point and server. If a connection has been established, we
+use `sl_NetCfgGet()` to retrieve the MAC address of the LaunchPad. The MAC
+address serves as a unique identifier to differentiate users. Afterwards, we
+make a HTTP GET request to retrieve user data from the following API route,
+using the MAC address as a path parameter to define the user ID. 
 
 ```
 /users/:userId
 ```
 
-In our API handler, we check whether there is an existing user with that MAC address identifier. If there is not yet an existing user for that MAC address, we first create a new entry in `UserTable`, and their `userCollection` array is initialized to be empty.
-Then, we return the user document in the space-separated format as shown below:
+In our API handler, we check whether there is an existing user with that MAC
+address identifier. If there is not yet an existing user for that MAC address,
+we first create a new entry in `UserTable`, and their `userCollection` array is
+initialized to be empty. Then, we return the user document in the
+space-separated format as shown below:
 
-We include an example of the returning payload when we retrieve user data for ID "a810876e2c3f". This user has seven Pokémon in their collection. In addition to the user's ID, the UUID and type of each Pokémon in their collection are returned.
+We include an example of the returning payload when we retrieve user data for ID
+"a810876e2c3f". This user has seven Pokémon in their collection. In addition to
+the user's ID, the UUID and type of each Pokémon in their collection are
+returned.
 
 ```
 a810876e2c3f
@@ -622,20 +642,29 @@ f430aa6b-3856-4573-bff4-698644a9efb8
 piplup
 ```
 
-In the above example response, the initial line is the ID of the requesting user.
-Then, every Pokemon in the collection is 2 lines long, consisting of the Pokemon
-ID and the Pokemon type. Since we can easily detect end-of-buffer in the HTTP
-response handler, we don't need to explicitly specify the number of returned pokemon.
+In the above example response, the initial line is the ID of the requesting
+user. Then, every Pokemon in the collection is 2 lines long, consisting of the
+Pokemon ID and the Pokemon type. Since we can easily detect end-of-buffer in
+the HTTP response handler, we don't need to explicitly specify the number of
+returned pokemon.
 
 ### Get nearby Pokémon
 
-While the user is on the landing page or collection page, we periodically make HTTP GET requests to retrieve the coordinates of the nearest Pokémon. If there are not enough Pokémon within a 100-meter radius of the user, the server adds more nearby Pokémon to the database. Furthermore, if the user is within a 10-meter radius of the nearest Pokémon, a Fight-or-Flee page should be rendered. On our Express server, this resource is located at the following API route, where latitude and longitude are passed as query parameters. The API expects the latitude and longitude to be in the format of decimal degrees.
+While the user is on the landing page or collection page, we periodically make
+HTTP GET requests to retrieve the coordinates of the nearest Pokémon. If there
+are not enough Pokémon within a 100-meter radius of the user, the server adds
+more nearby Pokémon to the database. Furthermore, if the user is within a
+10-meter radius of the nearest Pokémon, a Fight-or-Flee page should be rendered.
+On our Express server, this resource is located at the following API route,
+where latitude and longitude are passed as query parameters. The API expects the
+latitude and longitude to be in the format of decimal degrees.
 
 ```
 /pokemon/nearby?latitude=<latitude in decimal degrees>&longitude=<longitude in decimal degrees>
 ```
 
 An example request would look as follows:
+
 ```
 http://<server_address/pokemon/nearby?latitude=37.123456&longitude=-121.123456
 ```
@@ -865,5 +894,6 @@ to C style array converter.
 
 To display a bitmap, we defined an x-offset and y-offset in pixels to render the
 image at a specific location on the OLED screen. Using the offsets as well as
-the height and width of the bitmap, we applied `drawPixel(int x, int y, unsigned int color)`
-from `Adafruit_GFX.h` while iterating through the bitmap array.
+the height and width of the bitmap, we applied
+`drawPixel(int x, int y, unsigned int color)` from `Adafruit_GFX.h` while
+iterating through the bitmap array.
