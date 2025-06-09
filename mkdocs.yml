@@ -1,0 +1,18 @@
+site_name: Pokémini Go
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: black
+  logo: assets/pokeball.png
+  favicon: assets/pokeball.png
+  features:
+    - navigation.sections
+    - toc.integrate
+markdown_extensions:
+  - toc:
+      permalink: true
+  - tables
+  - admonition
+extra_css:
+  - stylesheets/extra.css
