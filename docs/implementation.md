@@ -41,14 +41,14 @@ following bytes to a second `volatile` buffer, named `sentence_type`, until we
 reach the first comma delimiter.
 
 Reading `\n` indicates that we have finished reading an entire NMEA-0183
-sentence to `rx_buffer`. We check if `sentence_type` stores the string `GNGGA`.
+sentence to `rx_buffer`. We check if `sentence_type` stores the string "GNGGA."
 If so, we parse `rx_buffer` to obtain the latitude and longitude. Afterwards, we
 reset `rx_buffer_idx` to zero, so we can read a new NMEA-0183 sentence to
 `rx_buffer`.
 
 ### Parse `rx_buffer`
 
-When an entire "GNGGA" sentence has been read to `rx_buffer`, we use `strtok` to
+When an entire GNGGA sentence has been read to `rx_buffer`, we use `strtok` to
 parse the comma-delimited string into an array of `tokens`. To check if this is
 a valid GPS reading in North America, we confirm that fourth field – direction
 of latitude – and sixth field – direction of longitude – are "N" (i.e., north)
@@ -127,8 +127,7 @@ MAP_UARTConfigSetExpClk(
     UARTA1_BASE,
     MAP_PRCMPeripheralClockGet(PRCM_UARTA1),
     57600,
-    (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
-     UART_CONFIG_PAR_NONE)
+    (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE)
 );
 ```
 
@@ -193,7 +192,7 @@ pass. We hand-tune this interval, eventually settling on a constant in our
 `gpg.c` file that we define as `const int GPG_READ_LIMIT = 60000`. How this
 works is that on every iteration of our main game loop in `game.c`, a function
 `PollEnableGPS()` is called which will increment a counter `gpg_read_timeout`.
-Then, when `gpg_read_timeout` reaches `GPG_READ_LIMIT` the UART1 RX buffer
+Then, when `gpg_read_timeout` reaches `GPG_READ_LIMIT`, the UART1 RX buffer
 interrupt handler is re-enabled, allowing the board to respond to and process
 the influx of GPS NMEA sentences. Then, when the GNGGA sentence is fully parsed,
 the UART1 RX buffer is disabled again. This strategy allows the board to sample
@@ -203,7 +202,7 @@ respective rates.
 
 ## IR sensor
 
-To decode the AT\&T IR remote transmissions, we copy over our solution from Lab
+To decode the AT&T IR remote transmissions, we copy over our solution from Lab
 3 ("IR Remote Control Texting Over a UART Link"). In particular, we use an AT&T
 S3 Universal Remote configured with TV code `1005`. This remote with the given
 TV code generates binary pulse-width modulated signals that uniquely identify
@@ -221,11 +220,11 @@ short pulse-width (less than 300 microseconds) to be a `0` bit, and a long
 pulse-width (over 3 milliseconds) to be a `1` bit. The AT&T remote sends a
 unique 16-bit code for each button. We only need to use the number keys, so we
 collect the unique codes for each number key and then define constants for these
-16-bit codes. As shown, numeric button 1 corresponds to code `0x5DAE`, which
+16-bit codes. As shown, numeric button `1` corresponds to code `0x5DAE`, which
 gets mapped to navigation into the landing page and to the fight button in the
-Fight-or-Flee page. Numeric button 2 corresponds to code `0x5DB5`, which gets
+fight-or-flee page. Numeric button `2` corresponds to code `0x5DB5`, which gets
 mapped to navigation into the collection page and to the flee button in the
-Fight-or-Flee page.
+fight-or-flee page.
 
 ![UBLOX CFG Device](./assets/page-numbers.png)
 
@@ -296,21 +295,21 @@ lat: 38.538496,
 lng: -121.757724
 ```
 
-which is approximately at the center of UC Davis campus.
+which is approximately at the center of the UC Davis campus.
 
-Then, we add an `<AdvancedMarker />` component, to the user's GPS coordinates,
+Then, we add an `<AdvancedMarker />` component to the user's GPS coordinates,
 which drops a pin onto the map at the specified coordinates.
 
 Using the `@aws-sdk/client-dynamodb` and `@aws-sdk/lib-dynamodb` libraries, we
-retrieve all Pokemon from the DynamoDB Pokemon collection and render each Pokemon
-onto the map using `<AdvancedMarker />` components at their respective GPS
-coordinates. Finally, we download transparent images for each of the five
-supported Pokemon types (Pikachu, Eevee, Lickitung, Piplup, Jigglypuff) and we
-set the `<AdvancedMarker />` icon for these Pokemon to be their respective
+retrieve all Pokémon from the DynamoDB Pokémon collection and render each
+Pokémon onto the map using `<AdvancedMarker />` components at their respective
+GPS coordinates. Finally, we download transparent images for each of the five
+supported Pokémon types (Pikachu, Eevee, Lickitung, Piplup, Jigglypuff) and we
+set the `<AdvancedMarker />` icon for these Pokémon to be their respective
 images.
 
 All of the `<AdvancedMarker />` components (both the user pin and all the
-Pokemon pins from DynamoDB) are set to update every 5 seconds.
+Pokémon pins from DynamoDB) are set to update every 5 seconds.
 
 ## Game business logic
 
@@ -331,7 +330,7 @@ state.
 10. `should_fight`: true if the user is within the 10-meter activation radius of the Pokémon; false otherwise. (INIT to false)
 11. `local_hearts`: the number of hearts the current user has. (INIT to 4)
 12. `enemy_hearts`: the number of hearts the nearest Pokémon has. (INIT to 4)
-13. `collection`: an array of Pokémon the user has collected; each Pokémon is represented as a struct that stores the Pokémon UUID and type. (INIT to {0})
+13. `collection`: an array of Pokémon that the user has collected; each Pokémon is represented as a struct that stores the Pokémon UUID and type. (INIT to {0})
 14. `collection_length`: the number of Pokémon in the user's collection. (INIT to 0)
 
 In regards to `state.state_type`, there are four possible states in which
@@ -381,21 +380,21 @@ void GameLoop(void)
 If we are in `STATE_LANDING_PAGE`, the function `LandingState()` is executed.
 This function checks if `state.first_run` is true. If so, it draws the static
 images for the home page on the OLED. While there are no nearby Pokémon to
-trigger the "fight or flee" page, the user will remain on the landing page
+trigger the fight-or-flee page, the user will remain on the landing page
 unless they switch to the collection page, and `LandingState()` keeps executing
 for every iteration of the game loop. This function also reads 
 `state.mcu_latitude` and `state.mcu_longitude`, and writes these values to the
 display if any digits have changed. These `mcu` state variables represent the
-GPS coordinates of the launchpad. As is discussed in the earlier GPS module
-description, after every 60000 iterations of the game loop we enable the GPS
+GPS coordinates of the LaunchPad. As is discussed in the earlier GPS module
+description, after every 60,000 iterations of the game loop, we enable the GPS
 UART interrupt to update `state.mcu_latitude` and `state.mcu_longitude`. For
 each call to `LandingState()`, we read the boolean variable
 `transmission_complete`, which indicates whether the IR decoder has read a valid
 signal from the remote. If `transmission_complete` is true and the encoding maps
-to button 1, then the user has switched from the landing page to the collection
-page. Therefore, we update `state.state_type` to `STATE_COLLECTION_PAGE` and set
-`state.first_run` to true. The next iteration of the game loop will render the
-collection page on the OLED.
+to button `1`, then the user has switched from the landing page to the
+collection page. Therefore, we update `state.state_type` to
+`STATE_COLLECTION_PAGE` and set `state.first_run` to true. The next iteration of
+the game loop will render the collection page on the OLED.
 
 When we render the collection page, we iterate through the array
 `state.collection` of type `struct PokemonCollectionItem`.
@@ -482,9 +481,9 @@ some pre-defined interval period, where in the meantime it simply just
 increments a counter and then yields control back to `GameLoop()`. First, we
 first enter the function corresponding to handling logic specific to the
 currently active page state. As is discussed earlier, we have a boolean
-variable `state.first_run` that is initially set to false right before
-transitioning to a new state, and which is then set to true after the first
-iteration of that particular state function completes. In this way we make the
+variable `state.first_run` that is initially set to true right before
+transitioning to a new state, and which is then set to false after the first
+iteration of that particular state function completes. In this way, we make the
 initial state logic, including rendering to the OLED, only execute once for a
 particular state. Then, after the logic for a single iteration of that state
 function is finished, control is returned back up to the `GameLoop()`.
@@ -494,7 +493,7 @@ function only enables the GPS UART data handler after 60,000 main loop
 iterations. What will happen is that `PollEnableGPS()` will immediately yield
 control back to `GameLoop()` unless the counter `gpg_read_timeout` reaches
 60,000. Then, when `gpg_read_timeout` reaches 60,000, then `PollEnableGPS()`
-will enable the UART1 GPS RX interrupt handler, allowing the Launchpad to
+will enable the UART1 GPS RX interrupt handler, allowing the LaunchPad to
 process an NMEA GNGGA sentence before then disabling the UART1 GPS RX interrupt
 handler again, and thus yielding time back to other interrupt handlers and other
 synchronous logic.
@@ -506,7 +505,7 @@ This function is only called if the `SetupNetwork()` function is `setup.c` has
 successfully executed, ensuring that we have a valid socket initialized. As is
 discussed earlier, we immediately yield control back to the game loop unless
 100,000 iterations of the game loop have passed. Then, we make an HTTP GET
-request to retrieve the information for the nearest Pokemon.
+request to retrieve the information for the nearest Pokémon.
 
 Finally, we add the if statement to "asynchronously" switch into the
 fight-or-flee page into the bottom of the game loop. This check is triggered
@@ -588,7 +587,7 @@ An example Pokemon document might look as follows:
 ```
 
 For Pokemon `id` fields, we generate random UUIDv4 identifiers. For user ID
-fields, we construct the ID using the MAC address of the Launchpad WiFi chip
+fields, we construct the ID using the MAC address of the LaunchPad WiFi chip
 serialized to a 12-digit hexadecimal string.
 
 ## Express.JS game server
