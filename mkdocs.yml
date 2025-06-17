@@ -23,3 +23,5 @@ extra_css:
   - stylesheets/extra.css
 plugins:
   - awesome-nav
+draft_docs: |
+  map.md
